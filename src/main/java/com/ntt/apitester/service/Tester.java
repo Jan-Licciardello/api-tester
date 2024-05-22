@@ -27,9 +27,18 @@ public class Tester implements ApplicationRunner {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
+    // INSERIRE IN QUESTA MAPPA I VALORI CHE SI VOGGLIONO TETSARE PER ENRICHMENT
+    protected Map<String, List<String>> elementToSet = Map.of(  "POP",              Arrays.asList("RM_01", "RM_07", "VE_02"),
+                                                                "SEMIANELLO",       Arrays.asList("VE_02/05E", "RM_01/01W", "RM_01/01E"),
+                                                                "PFP",              Arrays.asList("VE_02/15E3","VE_02/02E1", "VE_02/15E1", "VE_02/05E1"),
+                                                                "GL",               Arrays.asList("RM_01/01E/GL_0003", "RM_01/02W/GL_0001"),
+                                                                "PFS",              Arrays.asList("RM_01/03W11", "RM_01/01E32", "VE_02/10W11", "VE_02/11W33"),
+                                                                "APPARATO_EDIFICIO",Arrays.asList("L736_VIA FRATELLI RONDINA_14", "L736_VIA MATTUGLIE_26_1"),
+                                                                "PD",               Arrays.asList("VE_02/01E24/PD_001", "RM_18/03W23/PD_005"),
+                                                                "EDIFICIO",               Arrays.asList("12_058_058091_8000080411_153", "05_027_027042_8000088904_49"),
+                                                                "GL",               Arrays.asList("RM_18/03W/GL_0001", "RM_18/03W/GL_0002", "VE_02/15E/GL_0001", "VE_02/15E/GL_0002")
+                                                                    );
 
-    protected Map<String, List<String>> elementToSet = Map.of("POP", Arrays.asList("RM_01", "VE_02"),
-                                                            "PFP", Arrays.asList("VE_02/15E3","VE_02/02E1"));
     private List<Integer> levelToTest = Arrays.asList(0, -1, -2);
     private String host = "http://localhost:8080";
     private String endPoint = "/networkitems/v1/enrich";
@@ -72,15 +81,20 @@ public class Tester implements ApplicationRunner {
                                     out.println(" ----------------------------------- ");
                                 }else {
                                     String valoreResponseSalvata = readFileAsString(percorsoResponse);
-                                    //List<Map<String, Object>> jsonResponseSalvata = objectMapper.readValue(valoreResponseSalvata, new TypeReference<List<Map<String, Object>>>() {});
-                                    //List<Map<String, Object>> jsonRisposta        = objectMapper.readValue(responseBody, new TypeReference<List<Map<String, Object>>>() {});
-//                                    JsonNode jsonResponseSalvata = objectMapper.readTree(valoreResponseSalvata);
-//                                    JsonNode jsonResponseApi = objectMapper.readTree(responseBody);
-//
-                                    JSONArray jsonResponseSalvata = new JSONArray(valoreResponseSalvata);
-                                    JSONArray jsonResponseApi = new JSONArray(responseBody);
 
-                                    boolean areEquals = areJsonArrayEquals(jsonResponseSalvata, jsonResponseApi);
+                                    boolean areEquals = false;
+
+                                    if(valoreResponseSalvata.trim().charAt(0) != responseBody.trim().charAt(0)){
+                                        // Caso in cui un un'oggetto salavto è un array un oggetto salvato è una un oggetto json
+                                    }else if(valoreResponseSalvata.startsWith("[")){
+                                        JSONArray jsonResponseSalvata = new JSONArray(valoreResponseSalvata);
+                                        JSONArray jsonResponseApi = new JSONArray(responseBody);
+                                        areEquals = areJsonArraysEquals(jsonResponseSalvata, jsonResponseApi);
+                                    }else if(valoreResponseSalvata.startsWith("{")){
+                                        JSONObject jsonResponseSalvata = new JSONObject(valoreResponseSalvata);
+                                        JSONObject jsonResponseApi = new JSONObject(responseBody);
+                                        areEquals = areJsonObjectsEquals(jsonResponseSalvata, jsonResponseApi);
+                                    }
 
                                     if(areEquals)
                                         out.println(jsonBody + " OK");
