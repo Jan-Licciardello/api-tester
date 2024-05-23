@@ -2,6 +2,7 @@ package com.ntt.apitester.service.of;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ntt.apitester.dto.of.EnrichmentRequestBody;
+import com.ntt.apitester.enums.HttpMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +49,7 @@ public class Tester implements ApplicationRunner {
     private String serviceName = "networkitems";
     private String companyClient = "open-fiber";
 
-    private Boolean immagazzinaValori = false; // VARIABILE PER CAMBIARE DA SCRITTURA REQUEST CORRETTE A TEST
+    private Boolean immagazzinaValori = true; // VARIABILE PER CAMBIARE DA SCRITTURA REQUEST CORRETTE A TEST
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -72,17 +74,21 @@ public class Tester implements ApplicationRunner {
                         String jsonBody = objectMapper.writeValueAsString(requestBody);
 
                         // Creare la richiesta POST
-                        HttpPost httpPost = new HttpPost(host + endPoint);
-                        httpPost.setHeader("Content-Type", "application/json");
-                        httpPost.setHeader("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-                        httpPost.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
+//                        HttpPost httpPost = new HttpPost(host + endPoint);
+//                        httpPost.setHeader("Content-Type", "application/json");
+//                        httpPost.setHeader("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                        httpPost.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
+                        Map<String, String> headers = Map.of(   "Content-Type", "application/json",
+                                                                "Authorization", "none");
+
                         String nomeFile = elemnetType + "_" + name + "_" + level;
                         nomeFile = nomeFile.replace("/", "-");
                         String percorsoResponse = "responses//" + companyClient + "//" + serviceName + "//" + endPoint.replaceAll(serviceName, "").replace("//", "") +"//" + nomeFile + ".json";
 
-                            try (CloseableHttpResponse response = client.execute(httpPost)) {
+                            //try (CloseableHttpResponse response = client.execute(httpPost)) {
                                 // Ottenere il corpo della risposta
-                                String responseBody = new String(response.getEntity().getContent().readAllBytes());
+                                //String responseBody = new String(response.getEntity().getContent().readAllBytes());
+                                String responseBody = getJsonResponse(host + endPoint, HttpMethod.POST, headers, requestBody);
                                 if(immagazzinaValori) {
                                     writeJsonToFile(percorsoResponse, responseBody);
                                     nScritture++;
@@ -119,7 +125,7 @@ public class Tester implements ApplicationRunner {
 
                                 }
 
-                            }
+                           // }
 
                     }
                 }
