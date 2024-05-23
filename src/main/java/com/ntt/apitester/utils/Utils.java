@@ -99,7 +99,6 @@ public class Utils {
         }
     }
 
-
     public static String getJsonResponse(String path, HttpMethod method, Map<String, String> headers, Object body) throws IOException {
         // Costruzione dell'URL
         URL url = new URL(path);
@@ -130,16 +129,24 @@ public class Utils {
 
         // Lettura della risposta
         StringBuilder response = new StringBuilder();
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+        try {
+            boolean errors = false;
+            BufferedReader in;
+            if (connection.getResponseCode() >= 400) {
+                errors = true;
+
+                in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+            } else {
+                in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             }
+            if(!errors){
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+            }
+            in.close();
         } catch (IOException e) {
-            if(e.getMessage().contains(genericErrorMessage)){
-                out.println("\n ---- cURL REQUEST CHE HA TORNATO 500 --- \n");
-                out.println(generateCurlCommand(path, method, headers, body));
-            }
             e.printStackTrace();
         } finally {
             connection.disconnect(); // Chiusura della connessione
