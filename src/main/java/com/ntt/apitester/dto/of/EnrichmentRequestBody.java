@@ -1,4 +1,4 @@
-package com.ntt.apitester.dto;
+package com.ntt.apitester.dto.of;
 
 import lombok.*;
 

@@ -1,7 +1,7 @@
-package com.ntt.apitester.service;
+package com.ntt.apitester.service.of;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ntt.apitester.dto.EnrichmentRequestBody;
+import com.ntt.apitester.dto.of.EnrichmentRequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -37,17 +37,17 @@ public class Tester implements ApplicationRunner {
                                                                 "PFS",              Arrays.asList("RM_01/03W11", "RM_01/01E32", "VE_02/10W11", "VE_02/11W33"),
                                                                 "APPARATO_EDIFICIO",Arrays.asList("L736_VIA FRATELLI RONDINA_14", "L736_VIA MATTUGLIE_26_1"),
                                                                 "PD",               Arrays.asList("VE_02/01E24/PD_001", "RM_18/03W23/PD_005"),
-                                                                "EDIFICIO",               Arrays.asList("12_058_058091_8000080411_153", "05_027_027042_8000088904_49"),
+                                                                "EDIFICIO",         Arrays.asList("12_058_058091_8000080411_153", "05_027_027042_8000088904_49"),
                                                                 "GL",               Arrays.asList("RM_18/03W/GL_0001", "RM_18/03W/GL_0002", "VE_02/15E/GL_0001", "VE_02/15E/GL_0002")
                                                                     );
 
-    private List<Integer> levelToTest = Arrays.asList(0, -1, -2, -3, -4);
+    private List<Integer> levelToTest = Arrays.asList(0, -1, -2, -3, -4, -5);
     private String host = "http://localhost:8080";
     private String endPoint = "/networkitems/v1/enrich";
     private String serviceName = "networkitems";
     private String companyClient = "open-fiber";
 
-    private Boolean immagazzinaValori = true; // VARIABILE PER CAMBIARE DA SCRITTURA REQUEST CORRETTE A TEST
+    private Boolean immagazzinaValori = false; // VARIABILE PER CAMBIARE DA SCRITTURA REQUEST CORRETTE A TEST
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
