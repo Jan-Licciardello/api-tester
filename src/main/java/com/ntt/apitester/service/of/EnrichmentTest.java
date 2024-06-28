@@ -30,8 +30,8 @@ public class EnrichmentTest {
                                                                 "PFS",              Arrays.asList("RM_01/03W11", "RM_01/01E32", "VE_02/10W11", "VE_02/11W33"),
                                                                 "APPARATO_EDIFICIO",Arrays.asList("L736_VIA FRATELLI RONDINA_14", "L736_VIA MATTUGLIE_26_1"),
                                                                 "PD",               Arrays.asList("VE_02/01E24/PD_001", "RM_18/03W23/PD_005"),
-                                                                "EDIFICIO",         Arrays.asList("12_058_058091_8000080411_153", "05_027_027042_8000088904_49")/*,
-                                                                "GL",               Arrays.asList("RM_18/03W/GL_0001", "RM_18/03W/GL_0002", "VE_02/15E/GL_0001", "VE_02/15E/GL_0002")*/
+                                                                "EDIFICIO",         Arrays.asList("12_058_058091_8000080411_153", "05_027_027042_8000088904_49"),
+                                                                "GL",               Arrays.asList("RM_18/03W/GL_0001", "RM_18/03W/GL_0002", "VE_02/15E/GL_0001", "VE_02/15E/GL_0002")
                                                                     );
 
     private Map<String, String> headers = Map.of(   "Content-Type", "application/json",
@@ -44,7 +44,7 @@ public class EnrichmentTest {
     private String serviceName = "networkitems";
     private String companyClient = "open-fiber";
 
-    private Boolean immagazzinaValori = false; // VARIABILE PER CAMBIARE DA SCRITTURA REQUEST CORRETTE A TEST
+    private Boolean immagazzinaValori = true; // TODO <---------------- VARIABILE PER CAMBIARE DA SCRITTURA REQUEST CORRETTE A TEST
 
     public void test() throws Exception {
 
