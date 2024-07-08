@@ -44,7 +44,7 @@ public class EnrichmentTest {
     private String serviceName = "networkitems";
     private String companyClient = "open-fiber";
 
-    private Boolean immagazzinaValori = true; // TODO <---------------- VARIABILE PER CAMBIARE DA SCRITTURA REQUEST CORRETTE A TEST
+    private Boolean immagazzinaValori = false; // TODO <---------------- VARIABILE PER CAMBIARE DA SCRITTURA REQUEST CORRETTE A TEST
 
     public void test() throws Exception {
 
@@ -68,7 +68,7 @@ public class EnrichmentTest {
                     nomeFile = nomeFile.replace("/", "-");
                     String percorsoResponse = "responses//" + companyClient + "//" + serviceName + "//" + endPoint.replaceAll(serviceName, "").replace("//", "") +"//" + nomeFile + ".json";
 
-                    String responseBody = getJsonResponse(host + endPoint, HttpMethod.POST, headers, requestBody);
+                    String responseBody = host.contains("https") ? getJsonResponseNoHttps(host + endPoint, HttpMethod.POST, headers, requestBody) : getJsonResponse(host + endPoint, HttpMethod.POST, headers, requestBody);
                     if(immagazzinaValori) {
                         writeJsonToFile(percorsoResponse, responseBody);
                         nScritture++;
