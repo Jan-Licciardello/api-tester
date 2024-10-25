@@ -1,9 +1,9 @@
-package com.ntt.apitester.service.of;
+package com.ntt.apitester.service.of.tests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ntt.apitester.dto.of.EnrichmentRequestBody;
 import com.ntt.apitester.enums.HttpMethod;
-import lombok.extern.slf4j.Slf4j;
+//import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import static java.lang.System.out;
 
 
 @Component
-@Slf4j
+//@Slf4j
 public class EnrichmentTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -44,7 +44,8 @@ public class EnrichmentTest {
     private String serviceName = "networkitems";
     private String companyClient = "open-fiber";
 
-    private Boolean immagazzinaValori = false; // TODO <---------------- VARIABILE PER CAMBIARE DA SCRITTURA REQUEST CORRETTE A TEST
+    private Boolean immagazzinaValori = false; // TODO <---------------- true = il programma imagazzina nuovi valori e sovracrive le vecchie reuest
+                                                //TODO <---------------- false = il programma controlla che le rispostete ottenute siano uguali ai vecchi valori salvati
 
     public void test() throws Exception {
 
@@ -78,12 +79,13 @@ public class EnrichmentTest {
                         try {
                             valoreResponseSalvata = readFileAsString(percorsoResponse);
                         }catch (NoSuchFileException ex){
-                            log.error("\n ATTENZIONE PRIMA DI TESTARE LA REQUEST " + jsonBody + " DEVI PRIMA SALVARE IL RISULATAO IN UN FILE CON LA VARIABILE immagazzinaValori A TRUE \n");
+                            out.println("\n ATTENZIONE PRIMA DI TESTARE LA REQUEST " + jsonBody + " DEVI PRIMA SALVARE IL RISULATAO IN UN FILE CON LA VARIABILE immagazzinaValori A TRUE \n");
                             continue;
                         }
 
                         boolean areEquals = false;
                         try {
+                            nTest++;
                             if(!valoreResponseSalvata.isEmpty()){
                                 if(valoreResponseSalvata.trim().charAt(0) != responseBody.trim().charAt(0)){
                                     // Caso in cui un un'oggetto salavto è un array un oggetto salvato è una un oggetto json
@@ -96,7 +98,7 @@ public class EnrichmentTest {
                                     JSONObject jsonResponseApi = new JSONObject(responseBody);
                                     areEquals = areJsonObjectsEquals(jsonResponseSalvata, jsonResponseApi);
                                 }
-                                nTest++;
+
                                 if(areEquals){
                                     out.println(jsonBody + " OK");
                                     nSuccessTest++;

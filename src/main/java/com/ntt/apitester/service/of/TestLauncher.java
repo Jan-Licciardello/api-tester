@@ -1,5 +1,8 @@
 package com.ntt.apitester.service.of;
 
+import com.ntt.apitester.service.of.tests.EnrichmentTest;
+import com.ntt.apitester.service.of.tests.GeoCodeV2Test;
+import com.ntt.apitester.service.of.tests.RelatedNetworkTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,12 +17,12 @@ public class TestLauncher implements ApplicationRunner {
     private RelatedNetworkTest relatedNetworkTest;
 
     @Autowired
-    private  GeoCodeV2Test geoCodeV2Test;
+    private GeoCodeV2Test geoCodeV2Test;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        //enrichmentTest.test();
+        enrichmentTest.test();
         //relatedNetworkTest.test();
-        geoCodeV2Test.test();
+//        geoCodeV2Test.test();
     }
 }
